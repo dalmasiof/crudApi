@@ -1,6 +1,7 @@
+using AutoMapper;
+using crudApi.A_Application.ViewModels;
+using crudApi.B_Service;
 using crudApi.C_Domain;
-using crudApi.D_Repository;
-using crudApi.D_Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace crudApi.Controllers
@@ -9,22 +10,26 @@ namespace crudApi.Controllers
     [Route("User")]
     public class UserController : ControllerBase
     {
-        private readonly IBaseRepository repository;
+        private readonly IMapper mapper;
+        private readonly IUserService service;
 
-        public UserController(IBaseRepository repository)
+
+        public UserController(IUserService service, IMapper mapper)
         {
-            this.repository = repository;
+            this.service = service;
+            this.mapper = mapper;
+
         }
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(this.repository.GetList());
+            return Ok(this.service.GetList());
         }
 
         [HttpPost]
         public ActionResult Post()
         {
-            var mockUser = new User(){
+            var mockUser = new UserVM(){
                 Cpf="484956288",
                 ConfirmPassword="minhaSenha",
                 Email="dalmasiof@gmail.com",
@@ -33,8 +38,11 @@ namespace crudApi.Controllers
                 Phone="11963406824"
             };
 
-            this.repository.Add(mockUser);
-            this.repository.SaveChanges();
+            var toCreate = this.mapper.Map<UserVM,User>(mockUser);
+
+        
+            this.service.Add(toCreate);
+            this.service.SaveChanges();
             return Ok();
         }
 

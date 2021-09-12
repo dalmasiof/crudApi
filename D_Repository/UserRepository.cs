@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace crudApi.D_Repository
 {
-    public class UserRepository : IBaseRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext dbContext;
         public UserRepository(DataContext dbContext)
@@ -14,30 +14,69 @@ namespace crudApi.D_Repository
             this.dbContext = dbContext;
         }
 
-        public void Add<T>(T entity) where T : class
+        public void Add(User entity)
         {
-            this.dbContext.Add(entity);
+            try
+            {
+                this.dbContext.Users.Add(entity);
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-        public void Delete<T>(T entity) where T : class
+        public void Delete(User entity)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                this.dbContext.Users.Remove(entity);
+            }
+            catch (System.Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-        public ICollection<User> GetList() 
+        public ICollection<User> GetList()
         {
-            ICollection<User> list = this.dbContext.Users.ToList(); 
-            return list;
+            try
+            {
+                return this.dbContext.Users.ToList();
+
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public bool SaveChanges()
         {
-            return (this.dbContext.SaveChanges()>0);
+            try
+            {
+                return (this.dbContext.SaveChanges() > 0);
+
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public void Update<T>(T entity) where T : class
+        public void Update(User entity)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                this.dbContext.Users.Update(entity);
+
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

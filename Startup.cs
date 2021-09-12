@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using crudApi.A_Application.Configuration;
 using crudApi.D_Repository;
 using crudApi.D_Repository.Interface;
 using Microsoft.AspNetCore.Builder;
@@ -36,7 +37,9 @@ namespace crudApi
                 }
             );
 
-            services.AddScoped<IBaseRepository, UserRepository>();
+            DependencyInjectionConfig.DependencyInjection(services);
+            services.AddAutoMapper(typeof(Startup));
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

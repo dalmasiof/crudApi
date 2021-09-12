@@ -1,20 +1,13 @@
 using System.Collections.Generic;
-using crudApi.C_Domain;
 
-namespace crudApi.D_Repository.Interface
+namespace crudApi.B_Service
 {
-    public interface IBaseRepository <T> 
+    public interface IBaseService<T>
     {
-        
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
         ICollection<T> GetList();
         bool SaveChanges();
-
-
-
-
-
     }
 }

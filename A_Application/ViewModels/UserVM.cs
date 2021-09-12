@@ -1,6 +1,6 @@
-namespace crudApi.C_Domain
+namespace crudApi.A_Application.ViewModels
 {
-    public class User : BaseEntity
+    public class UserVM : BaseVM
     {
         public string Name { get; set; }
         public string Cpf { get; set; }
@@ -8,6 +8,5 @@ namespace crudApi.C_Domain
         public string Email { get; set; }
         public string PassWord { get; set; }
         public string ConfirmPassword { get; set; }
-
     }
 }
