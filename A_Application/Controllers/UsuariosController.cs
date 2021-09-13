@@ -18,13 +18,13 @@ namespace crudApi.A_Application.Controllers
     [ApiController]
     
     // [AllowAn]
-    public class UsuariosController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
         private readonly IConfiguration _configuration;
-        public UsuariosController(UserManager<IdentityUser> userManager,
+        public UserController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager, IConfiguration configuration
             )
         {
@@ -35,25 +35,23 @@ namespace crudApi.A_Application.Controllers
      
 
         [HttpPost]
-        [Authorize]
-        [Route("Create")]
-        
-        public async Task<ActionResult<UserToken>> Create(UserVM model)
+        public async Task<ActionResult> Post([FromBody] UserVM model)
         {
             var user = new IdentityUser { Email = model.Email,UserName = model.Email };
 
             var result = await _userManager.CreateAsync(user, model.PassWord);
             if (result.Succeeded)
             {
-                return BuildToken(model);
+                return Ok(model);
             }
             else
             {
                 return BadRequest("Usuário ou senha inválidos");
             }
         }
-        [HttpPost("Login")]
-      
+        
+        [HttpPost]
+        [Route("Login")]
         public async Task<ActionResult<UserToken>> Login(UserVM userInfo)
         {
             var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.PassWord,
