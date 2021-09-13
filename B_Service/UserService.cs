@@ -13,17 +13,17 @@ namespace crudApi.B_Service
             this.repository = repository;
 
         }
-        public void Add(User entity)
+        public void Add(UserFake entity)
         {
             this.repository.Add(entity);
         }
 
-        public void Delete(User entity)
+        public void Delete(UserFake entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public ICollection<User> GetList()
+        public ICollection<UserFake> GetList()
         {
             return this.repository.GetList();
         }
@@ -33,7 +33,7 @@ namespace crudApi.B_Service
             return this.repository.SaveChanges();
         }
 
-        public void Update(User entity)
+        public void Update(UserFake entity)
         {
             throw new System.NotImplementedException();
         }

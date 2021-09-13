@@ -8,7 +8,7 @@ namespace crudApi.A_Application.Configuration
     {
         public AutoMapperConfig()
         {
-            CreateMap<UserVM,User>().ReverseMap();
+            CreateMap<UserVM,UserFake>().ReverseMap();
         }
 
         

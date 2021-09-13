@@ -1,6 +1,6 @@
 namespace crudApi.C_Domain
 {
-    public class User : BaseEntity
+    public class UserFake : BaseEntity
     {
         public string Name { get; set; }
         public string Cpf { get; set; }

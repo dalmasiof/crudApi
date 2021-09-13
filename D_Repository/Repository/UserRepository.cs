@@ -14,11 +14,11 @@ namespace crudApi.D_Repository
             this.dbContext = dbContext;
         }
 
-        public void Add(User entity)
+        public void Add(UserFake entity)
         {
             try
             {
-                this.dbContext.Users.Add(entity);
+                this.dbContext.UserFakes.Add(entity);
             }
             catch (System.Exception ex)
             {
@@ -27,11 +27,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public void Delete(User entity)
+        public void Delete(UserFake entity)
         {
             try
             {
-                this.dbContext.Users.Remove(entity);
+                this.dbContext.UserFakes.Remove(entity);
             }
             catch (System.Exception ex)
             {
@@ -40,11 +40,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public ICollection<User> GetList()
+        public ICollection<UserFake> GetList()
         {
             try
             {
-                return this.dbContext.Users.ToList();
+                return this.dbContext.UserFakes.ToList();
 
             }
             catch (System.Exception ex)
@@ -66,11 +66,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public void Update(User entity)
+        public void Update(UserFake entity)
         {
             try
             {
-                this.dbContext.Users.Update(entity);
+                this.dbContext.UserFakes.Update(entity);
 
             }
             catch (System.Exception ex)
