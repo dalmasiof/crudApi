@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 // using AutoMapper.Configuration;
 using crudApi.A_Application.ViewModels;
 using crudApi.C_Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ namespace crudApi.A_Application.Controllers
 {
     [Route("User")]
     [ApiController]
+    
     // [AllowAn]
     public class UsuariosController : ControllerBase
     {
@@ -30,19 +32,17 @@ namespace crudApi.A_Application.Controllers
             _signInManager = signInManager;
             _configuration = configuration;
         }
-         [HttpGet]
-         public ActionResult<string> Get()
-         {
-            return " << Controlador UsuariosController :: WebApiUsuarios >> ";
-         }
-         
-        [HttpPost]
-        [Route("Criar")]
-        public async Task<ActionResult<UserToken>> CreateUser([FromBody] UserInfo model)
-        {
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+     
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+        [HttpPost]
+        [Authorize]
+        [Route("Create")]
+        
+        public async Task<ActionResult<UserToken>> Create(UserVM model)
+        {
+            var user = new IdentityUser { Email = model.Email,UserName = model.Email };
+
+            var result = await _userManager.CreateAsync(user, model.PassWord);
             if (result.Succeeded)
             {
                 return BuildToken(model);
@@ -53,9 +53,10 @@ namespace crudApi.A_Application.Controllers
             }
         }
         [HttpPost("Login")]
-        public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
+      
+        public async Task<ActionResult<UserToken>> Login(UserVM userInfo)
         {
-            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, 
+            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.PassWord,
                  isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
@@ -68,12 +69,12 @@ namespace crudApi.A_Application.Controllers
                 return BadRequest(ModelState);
             }
         }
-        private UserToken BuildToken(UserInfo userInfo)
+       
+        private UserToken BuildToken(UserVM userInfo)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
-                new Claim("meuValor", "oque voce quiser"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

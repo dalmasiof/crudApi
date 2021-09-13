@@ -4,26 +4,26 @@ using crudApi.D_Repository.Interface;
 
 namespace crudApi.B_Service
 {
-    public class UserService : IUserService
+    public class ProductService : IProductService
     {
-        private readonly IUserRepository repository;
+        private readonly IProductRepository repository;
 
-        public UserService(IUserRepository repository)
+        public ProductService(IProductRepository repository)
         {
             this.repository = repository;
 
         }
-        public void Add(UserFake entity)
+        public void Add(Product entity)
         {
             this.repository.Add(entity);
         }
 
-        public void Delete(UserFake entity)
+        public void Delete(Product entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public ICollection<UserFake> GetList()
+        public ICollection<Product> GetList()
         {
             return this.repository.GetList();
         }
@@ -33,7 +33,7 @@ namespace crudApi.B_Service
             return this.repository.SaveChanges();
         }
 
-        public void Update(UserFake entity)
+        public void Update(Product entity)
         {
             throw new System.NotImplementedException();
         }

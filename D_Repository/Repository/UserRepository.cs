@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace crudApi.D_Repository
 {
-    public class UserRepository : IUserRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly DataContext dbContext;
-        public UserRepository(DataContext dbContext)
+        public ProductRepository(DataContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public void Add(UserFake entity)
+        public void Add(Product entity)
         {
             try
             {
-                this.dbContext.UserFakes.Add(entity);
+                this.dbContext.products.Add(entity);
             }
             catch (System.Exception ex)
             {
@@ -27,11 +27,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public void Delete(UserFake entity)
+        public void Delete(Product entity)
         {
             try
             {
-                this.dbContext.UserFakes.Remove(entity);
+                this.dbContext.products.Remove(entity);
             }
             catch (System.Exception ex)
             {
@@ -40,11 +40,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public ICollection<UserFake> GetList()
+        public ICollection<Product> GetList()
         {
             try
             {
-                return this.dbContext.UserFakes.ToList();
+                return this.dbContext.products.ToList();
 
             }
             catch (System.Exception ex)
@@ -66,11 +66,11 @@ namespace crudApi.D_Repository
             }
         }
 
-        public void Update(UserFake entity)
+        public void Update(Product entity)
         {
             try
             {
-                this.dbContext.UserFakes.Update(entity);
+                this.dbContext.products.Update(entity);
 
             }
             catch (System.Exception ex)
