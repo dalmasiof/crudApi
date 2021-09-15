@@ -44,7 +44,6 @@ namespace crudApi
             //     .AddDefaultTokenProviders());
 
             services.AddDefaultIdentity<IdentityUser>()
-            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();
 
@@ -87,7 +86,7 @@ namespace crudApi
             .AllowAnyHeader());
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization(); 
 
             app.UseEndpoints(endpoints =>
             {
