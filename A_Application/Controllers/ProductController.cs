@@ -43,8 +43,8 @@ namespace crudApi.A_Application.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var prodList = mapper.Map<ICollection<Product>, ICollection<ProductVM>>(
-                this.productService.GetList()
+            var prodList = mapper.Map<List<Product>, List<ProductVM>>(
+                this.productService.GetList().ToList()
                 );
 
             if (prodList.Count > 0)
@@ -72,6 +72,25 @@ namespace crudApi.A_Application.Controllers
             else
             {
                 return BadRequest("Product not deleted");
+            }
+        }
+
+        [HttpGet("{Id:int}")]
+        [Authorize]
+
+        public ActionResult Get(int Id)
+        {
+
+            var prodGetbyId = this.mapper.Map<Product,ProductVM>(this.productService.GetList().Where(x=>x.Id == Id).FirstOrDefault()); 
+            
+
+            if (prodGetbyId != null)
+            {
+                return Ok(prodGetbyId);
+            }
+            else
+            {
+                return BadRequest("Product not found");
             }
         }
 
