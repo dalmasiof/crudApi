@@ -12,7 +12,7 @@ namespace crudApi.D_Repository
         }
         public DbSet<Product> products { get; set; }
         public DbSet<PurchaseOrder> purchaseOrders { get; set; }
-        public DbSet<Cart> carts { get; set; }
+        
 
     }
 
