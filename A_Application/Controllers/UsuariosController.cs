@@ -1,10 +1,12 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 // using AutoMapper.Configuration;
 using crudApi.A_Application.ViewModels;
+using crudApi.B_Service;
 using crudApi.C_Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,13 +26,16 @@ namespace crudApi.A_Application.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userSvc;
+
         public UserController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager, IConfiguration configuration
+            SignInManager<IdentityUser> signInManager, IConfiguration configuration,IUserService userService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _userSvc = userService;
         }
 
 
@@ -70,6 +75,15 @@ namespace crudApi.A_Application.Controllers
             {     
                 return BadRequest("Invalid user or password, try again.");
             }
+        }
+
+        [HttpGet]
+        [Route("GetByEmail/{email:string}")]
+        public ActionResult<UserDataVM> GetByEmail(string email)
+        {
+            var user = this._userSvc.GetList().Where(x=>x.Email == email).FirstOrDefault();
+
+            return Ok(user);
         }
 
         private UserToken BuildToken(UserVM userInfo)

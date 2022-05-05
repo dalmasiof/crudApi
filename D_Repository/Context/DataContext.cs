@@ -11,6 +11,7 @@ namespace crudApi.D_Repository
             
         }
         public DbSet<Product> products { get; set; }
+        public DbSet<UserData> users { get; set; }
         public DbSet<PurchaseOrder> purchaseOrders { get; set; }
         
 
