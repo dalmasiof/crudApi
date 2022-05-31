@@ -3,13 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace crudApi.Migrations
 {
-    public partial class addIdentity : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Users");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -50,21 +47,55 @@ namespace crudApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserFakes",
+                name: "products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Cpf = table.Column<string>(type: "TEXT", nullable: true),
-                    Phone = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    PassWord = table.Column<string>(type: "TEXT", nullable: true),
-                    ConfirmPassword = table.Column<string>(type: "TEXT", nullable: true)
+                    Value = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
+                    ImgPath = table.Column<string>(type: "TEXT", nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserFakes", x => x.Id);
+                    table.PrimaryKey("PK_products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "purchaseOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IdUserata = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdProduct = table.Column<int>(type: "INTEGER", nullable: false),
+                    Discount = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
+                    Total = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
+                    TotalToPay = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
+                    StatusDelivery = table.Column<string>(type: "TEXT", nullable: true),
+                    StatusPO = table.Column<string>(type: "TEXT", nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_purchaseOrders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,8 +144,8 @@ namespace crudApi.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -158,8 +189,8 @@ namespace crudApi.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -169,6 +200,30 @@ namespace crudApi.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPurchaseOrder",
+                columns: table => new
+                {
+                    ProductsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PurchaseOrdersId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPurchaseOrder", x => new { x.ProductsId, x.PurchaseOrdersId });
+                    table.ForeignKey(
+                        name: "FK_ProductPurchaseOrder_products_ProductsId",
+                        column: x => x.ProductsId,
+                        principalTable: "products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductPurchaseOrder_purchaseOrders_PurchaseOrdersId",
+                        column: x => x.PurchaseOrdersId,
+                        principalTable: "purchaseOrders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -209,6 +264,11 @@ namespace crudApi.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPurchaseOrder_PurchaseOrdersId",
+                table: "ProductPurchaseOrder",
+                column: "PurchaseOrdersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -229,7 +289,10 @@ namespace crudApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "UserFakes");
+                name: "ProductPurchaseOrder");
+
+            migrationBuilder.DropTable(
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -237,23 +300,11 @@ namespace crudApi.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ConfirmPassword = table.Column<string>(type: "TEXT", nullable: true),
-                    Cpf = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    PassWord = table.Column<string>(type: "TEXT", nullable: true),
-                    Phone = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "products");
+
+            migrationBuilder.DropTable(
+                name: "purchaseOrders");
         }
     }
 }

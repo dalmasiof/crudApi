@@ -212,6 +212,21 @@ namespace crudApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ProductPurchaseOrder", b =>
+                {
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PurchaseOrdersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductsId", "PurchaseOrdersId");
+
+                    b.HasIndex("PurchaseOrdersId");
+
+                    b.ToTable("ProductPurchaseOrder");
+                });
+
             modelBuilder.Entity("crudApi.C_Domain.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -228,6 +243,7 @@ namespace crudApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Value")
+                        .HasPrecision(5, 2)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -241,12 +257,59 @@ namespace crudApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("IdProduct")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdUserata")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("StatusDelivery")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StatusPO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalToPay")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("purchaseOrders");
+                });
+
+            modelBuilder.Entity("crudApi.C_Domain.UserData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -296,6 +359,21 @@ namespace crudApi.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductPurchaseOrder", b =>
+                {
+                    b.HasOne("crudApi.C_Domain.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("crudApi.C_Domain.PurchaseOrder", null)
+                        .WithMany()
+                        .HasForeignKey("PurchaseOrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
