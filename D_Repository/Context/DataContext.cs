@@ -8,10 +8,23 @@ namespace crudApi.D_Repository
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Product>().Property(x => x.Value).HasPrecision(5, 2);
+            builder.Entity<Product>().Property(x => x.Value).HasPrecision(7, 2);
             builder.Entity<PurchaseOrder>().Property(x => x.Discount).HasPrecision(5, 2);
-            builder.Entity<PurchaseOrder>().Property(x => x.Total).HasPrecision(5, 2);
-            builder.Entity<PurchaseOrder>().Property(x => x.TotalToPay).HasPrecision(5, 2);
+            builder.Entity<PurchaseOrder>().Property(x => x.Total).HasPrecision(10, 2);
+            builder.Entity<PurchaseOrder>().Property(x => x.TotalToPay).HasPrecision(10, 2);
+
+            var products = new Product[]{
+                new Product{Id=1,ImgPath="assets/gopro.jpg",Name="GoPro Camera",Value=750.00M},
+                new Product{Id=2,ImgPath="assets/gopro.jpg",Name="GoPro Camera",Value=750.00M},
+                new Product{Id=3,ImgPath="assets/headset.jpg",Name="HeadSet",Value=55.50M},
+                new Product{Id=4,ImgPath="assets/keyboard.jpg",Name="Keyboard",Value=99.99M},
+                new Product{Id=5,ImgPath="assets/laptop.jpg",Name="Laptop",Value=1525.00M},
+                new Product{Id=6,ImgPath="assets/mousepad.jpg",Name="MousePad",Value=15.50M},
+                new Product{Id=7,ImgPath="assets/webcam.jpg",Name="webcam",Value=100.00M}
+            };
+
+            builder.Entity<Product>().HasData(products);
+
 
             base.OnModelCreating(builder);
         }

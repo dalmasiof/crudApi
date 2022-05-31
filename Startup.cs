@@ -27,12 +27,24 @@ namespace crudApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(
-                ctx =>
-                {
-                    ctx.UseSqlite(Configuration.GetConnectionString("default"));
-                }
-            );
+              services.AddCors(c =>
+              {
+                  c.AddPolicy("AllowOrigin", options =>
+                  {
+                      options.AllowAnyOrigin().
+                      AllowAnyMethod().
+                      AllowAnyHeader();
+                  });
+              });
+
+            services.AddDbContext<DataContext>(x =>
+             {
+                 string connStr;
+                 connStr = Configuration.GetConnectionString("sqlConnection");
+
+                 x.UseMySql(connStr, new MySqlServerVersion(new Version(5, 0, 0)));
+
+             });
 
             DependencyInjectionConfig.DependencyInjection(services);
 
