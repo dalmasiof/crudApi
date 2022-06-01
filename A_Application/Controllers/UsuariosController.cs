@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using crudApi.A_Application.ViewModels;
@@ -55,12 +56,12 @@ namespace crudApi.A_Application.Controllers
         }
 
         [HttpGet]
-        [Route("GetByEmail/{email}")]
-        public ActionResult GetByEmail(string email)
+        [Route("GetUsers")]
+        public ActionResult GetUsers()
         {
-            var user = this._userSvc.GetList().Where(x => x.Email == email).FirstOrDefault();
-
-            return Ok(user);
+            var usersBD = this._userSvc.GetList();
+            var UsersVM = this._mapper.Map<ICollection<UserData>,ICollection<UserDataVM>>(usersBD);
+                return Ok(UsersVM);
         }
 
         [HttpPut]
@@ -75,7 +76,6 @@ namespace crudApi.A_Application.Controllers
                 return Ok(this._mapper.Map<UserData, UserDataVM>(userBD));
 
             return BadRequest();
-
         }
 
         [HttpDelete]
@@ -90,7 +90,6 @@ namespace crudApi.A_Application.Controllers
                 return Ok();
 
             return BadRequest();
-
         }
     }
 }
