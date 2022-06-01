@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using crudApi.A_Application.Configuration;
 using crudApi.D_Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace crudApi
@@ -55,20 +53,20 @@ namespace crudApi
             //     .AddEntityFrameworkStores<DataContext>()
             //     .AddDefaultTokenProviders());
 
-            services.AddDefaultIdentity<IdentityUser>()
-            .AddEntityFrameworkStores<DataContext>()
-            .AddDefaultTokenProviders();
+        //     services.AddDefaultIdentity<IdentityUser>()
+        //     .AddEntityFrameworkStores<DataContext>()
+        //     .AddDefaultTokenProviders();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
-            ClockSkew = TimeSpan.Zero
-        });
+        //     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+        // options.TokenValidationParameters = new TokenValidationParameters
+        // {
+        //     ValidateIssuer = false,
+        //     ValidateAudience = false,
+        //     ValidateLifetime = true,
+        //     ValidateIssuerSigningKey = true,
+        //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
+        //     ClockSkew = TimeSpan.Zero
+        // });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -97,8 +95,8 @@ namespace crudApi
             .AllowAnyMethod()
             .AllowAnyHeader());
 
-            app.UseAuthentication();
-            app.UseAuthorization(); 
+            // app.UseAuthentication();
+            // app.UseAuthorization(); 
 
             app.UseEndpoints(endpoints =>
             {

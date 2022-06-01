@@ -1,10 +1,9 @@
 using crudApi.C_Domain;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace crudApi.D_Repository
 {
-    public class DataContext : IdentityDbContext
+    public class DataContext : DbContext
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -23,7 +22,13 @@ namespace crudApi.D_Repository
                 new Product{Id=7,ImgPath="assets/webcam.jpg",Name="webcam",Value=100.00M}
             };
 
+            var user = new UserData[]{
+                new UserData{AvatarUrl="",Email="admin",Id=1,Name="Ademir",Password="admin"}
+            };
+
             builder.Entity<Product>().HasData(products);
+            builder.Entity<UserData>().HasData(user);
+
 
 
             base.OnModelCreating(builder);

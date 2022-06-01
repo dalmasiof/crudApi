@@ -1,19 +1,11 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
+
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-// using AutoMapper.Configuration;
 using crudApi.A_Application.ViewModels;
 using crudApi.B_Service;
 using crudApi.C_Domain;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+
 
 namespace crudApi.A_Application.Controllers
 {
@@ -23,21 +15,10 @@ namespace crudApi.A_Application.Controllers
     // [AllowAn]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userSvc;
-
         private readonly IMapper _mapper;
-
-        public UserController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager, IConfiguration configuration, IUserService userService, IMapper mapper
-            )
+        public UserController(IUserService userService, IMapper mapper)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
             _userSvc = userService;
             _mapper = mapper;
         }
@@ -45,51 +26,37 @@ namespace crudApi.A_Application.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<ActionResult> Post([FromBody] UserDataVM model)
+        public ActionResult Create(UserDataVM model)
         {
-            var user = new IdentityUser { Email = model.Email, UserName = model.Email };
 
-            var result = await _userManager.CreateAsync(user, model.PassWord);
-            if (result.Succeeded)
-            {
-                var userBD = this._mapper.Map<UserDataVM, UserData>(model);
-                this._userSvc.Add(userBD);
-                if (this._userSvc.SaveChanges())
-                    return Ok(model);
+            var userBD = this._mapper.Map<UserDataVM, UserData>(model);
+            this._userSvc.Add(userBD);
+            if (this._userSvc.SaveChanges())
+                return Ok(model);
 
-                return BadRequest();
-            }
-            else
-            {
-                var errors = "";
-                foreach (var err in result.Errors)
-                {
-                    errors += err.Description + " ,";
-                }
-                return BadRequest(errors);
-            }
+            return BadRequest();
+
         }
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<UserToken>> Login(UserDataVM userInfo)
+        public ActionResult Login(UserDataVM userInfo)
         {
-            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.PassWord,
-                 isPersistent: false, lockoutOnFailure: false);
+            var user = this._userSvc.GetList().Where(x => x.Email == userInfo.Email && x.Password == userInfo.Password).FirstOrDefault();
 
-            if (result.Succeeded)
+            if (user != null)
             {
-                return BuildToken(userInfo);
+                return Ok(user);
             }
             else
             {
-                return BadRequest("Invalid user or password, try again.");
+                return Unauthorized();
             }
         }
 
         [HttpGet]
         [Route("GetByEmail/{email}")]
-        public ActionResult<UserDataVM> GetByEmail(string email)
+        public ActionResult GetByEmail(string email)
         {
             var user = this._userSvc.GetList().Where(x => x.Email == email).FirstOrDefault();
 
@@ -98,7 +65,7 @@ namespace crudApi.A_Application.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult<UserDataVM> Update(UserDataVM userDataVM)
+        public ActionResult Update(UserDataVM userDataVM)
         {
             var userBD = this._mapper.Map<UserDataVM, UserData>(userDataVM);
 
@@ -113,7 +80,7 @@ namespace crudApi.A_Application.Controllers
 
         [HttpDelete]
         [Route("Delete/{Id}")]
-        public ActionResult<UserDataVM> Delete(int Id)
+        public ActionResult Delete(int Id)
         {
             var userBD = this._userSvc.GetList().Where(x => x.Id == Id).FirstOrDefault();
 
@@ -124,29 +91,6 @@ namespace crudApi.A_Application.Controllers
 
             return BadRequest();
 
-        }
-
-        private UserToken BuildToken(UserDataVM userInfo)
-        {
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            // tempo de expiração do token: 1 hora
-            var expiration = DateTime.UtcNow.AddHours(1);
-
-            JwtSecurityToken token = new JwtSecurityToken(
-               issuer: null,
-               audience: null,
-               expires: expiration,
-               signingCredentials: creds);
-
-            return new UserToken()
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration,
-                Name = userInfo.Email
-            };
         }
     }
 }
