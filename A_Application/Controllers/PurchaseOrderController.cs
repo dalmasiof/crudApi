@@ -22,6 +22,20 @@ namespace crudApi.A_Application.Controllers
             this.mapper = mapper;
         }
 
-   
+        [HttpGet]
+        public ActionResult Get()
+        {
+            // var userBD = this._userSvc.GetList().Where(x => x.Id == Id).FirstOrDefault();
+
+            // this._userSvc.Delete(userBD);
+
+            //  (this._userSvc.SaveChanges())
+            // return Ok();
+
+            return BadRequest();
+
+        }
+
+
     }
 }
