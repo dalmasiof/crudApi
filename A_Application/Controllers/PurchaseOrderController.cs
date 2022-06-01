@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using crudApi.A_Application.ViewModels;
 using crudApi.B_Service;
+using crudApi.B_Service.Interfaces;
 using crudApi.C_Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,28 +14,99 @@ namespace crudApi.A_Application.Controllers
     public class PurchaseOrderController : ControllerBase
     {
 
-        private readonly IProductService productService;
+        private readonly IPurchaseOrderService purchaseOrderService;
         private readonly IMapper mapper;
 
-        public PurchaseOrderController(IProductService productService, IMapper mapper)
+        public PurchaseOrderController(IPurchaseOrderService purchaseOrderService, IMapper mapper)
         {
-            this.productService = productService;
+            this.purchaseOrderService = purchaseOrderService;
             this.mapper = mapper;
+        }
+
+        [HttpPost]
+        public ActionResult Post(PurchaseOrderVM model)
+        {
+            var prodTOCreate = mapper.Map<PurchaseOrderVM, PurchaseOrder>(model);
+
+            this.purchaseOrderService.Add(prodTOCreate);
+            if (this.purchaseOrderService.SaveChanges())
+            {
+                return Ok(prodTOCreate);
+            }
+            else
+            {
+                return BadRequest("PO creating Error");
+            }
         }
 
         [HttpGet]
         public ActionResult Get()
         {
-            // var userBD = this._userSvc.GetList().Where(x => x.Id == Id).FirstOrDefault();
+            var poList = mapper.Map<ICollection<PurchaseOrder>, ICollection<PurchaseOrderVM>>(
+                this.purchaseOrderService.GetList()
+                );
 
-            // this._userSvc.Delete(userBD);
-
-            //  (this._userSvc.SaveChanges())
-            // return Ok();
-
-            return BadRequest();
-
+            if (poList.Count > 0)
+            {
+                return Ok(poList);
+            }
+            else
+            {
+                return NotFound("PO`s empty list");
+            }
         }
+
+        [HttpDelete("{Id}")]
+        public ActionResult Delete(int Id)
+        {
+
+            this.purchaseOrderService.Delete(this.purchaseOrderService.GetList().Where(x => x.Id == Id).FirstOrDefault());
+
+            if (this.purchaseOrderService.SaveChanges())
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("PO not deleted");
+            }
+        }
+
+        [HttpGet("{Id}")]
+        public ActionResult Get(int Id)
+        {
+
+            var poGetbyId = this.mapper.Map<PurchaseOrder,PurchaseOrderVM>(this.purchaseOrderService.GetList().Where(x=>x.Id == Id).FirstOrDefault()); 
+            
+
+            if (poGetbyId != null)
+            {
+                return Ok(poGetbyId);
+            }
+            else
+            {
+                return BadRequest("POs not found");
+            }
+        }
+
+        [HttpPut]
+        public ActionResult Put(PurchaseOrderVM poVM)
+        {
+
+            var toUpdate = this.mapper.Map<PurchaseOrderVM, PurchaseOrder>(poVM);
+
+            this.purchaseOrderService.Update(toUpdate);
+
+            if (this.purchaseOrderService.SaveChanges())
+            {
+                return Ok(toUpdate);
+            }
+            else
+            {
+                return BadRequest("PO not updated");
+            }
+        }
+
 
 
     }

@@ -24,8 +24,7 @@ namespace crudApi.A_Application.Controllers
 
 
         [HttpPost]
-        [Authorize]
-        public ActionResult Post([FromBody] ProductVM model)
+        public ActionResult Post( ProductVM model)
         {
             var prodTOCreate = mapper.Map<ProductVM, Product>(model);
 
@@ -57,9 +56,7 @@ namespace crudApi.A_Application.Controllers
             }
         }
 
-        [HttpDelete("{Id:int}")]
-        [Authorize]
-
+        [HttpDelete("{Id}")]
         public ActionResult Delete(int Id)
         {
 
@@ -75,9 +72,7 @@ namespace crudApi.A_Application.Controllers
             }
         }
 
-        [HttpGet("{Id:int}")]
-        [Authorize]
-
+        [HttpGet("{Id}")]
         public ActionResult Get(int Id)
         {
 
@@ -95,7 +90,6 @@ namespace crudApi.A_Application.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public ActionResult Put(ProductVM productVM)
         {
 
