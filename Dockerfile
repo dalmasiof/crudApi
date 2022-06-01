@@ -9,7 +9,7 @@ RUN dotnet restore
 COPY . ./
 #Build database
 RUN dotnet tool install --global dotnet-ef
-RUN dotnet ef database update
+# RUN dotnet ef database update
 #Build project
 RUN dotnet publish -c Release -o out
 
