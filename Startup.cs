@@ -48,26 +48,6 @@ namespace crudApi
 
             services.AddAutoMapper(typeof(Startup));
 
-            // services.AddDbContext<DataContext>(options =>
-            // services.AddDefaultIdentity<IdentityUser>()
-            //     .AddEntityFrameworkStores<DataContext>()
-            //     .AddDefaultTokenProviders());
-
-        //     services.AddDefaultIdentity<IdentityUser>()
-        //     .AddEntityFrameworkStores<DataContext>()
-        //     .AddDefaultTokenProviders();
-
-        //     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        // options.TokenValidationParameters = new TokenValidationParameters
-        // {
-        //     ValidateIssuer = false,
-        //     ValidateAudience = false,
-        //     ValidateLifetime = true,
-        //     ValidateIssuerSigningKey = true,
-        //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
-        //     ClockSkew = TimeSpan.Zero
-        // });
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -94,9 +74,6 @@ namespace crudApi
             .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader());
-
-            // app.UseAuthentication();
-            // app.UseAuthorization(); 
 
             app.UseEndpoints(endpoints =>
             {

@@ -96,9 +96,11 @@ namespace crudApi.A_Application.Controllers
 
             this.purchaseOrderService.Update(toUpdate);
 
+
             if (this.purchaseOrderService.SaveChanges())
             {
-                return Ok(toUpdate);
+                var toUpdateVM = this.mapper.Map<PurchaseOrder, PurchaseOrderVM>(toUpdate);
+                return Ok(toUpdateVM);
             }
             else
             {

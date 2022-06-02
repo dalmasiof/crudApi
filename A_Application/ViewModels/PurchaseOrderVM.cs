@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace crudApi.A_Application.ViewModels
 {
-    public class PurchaseOrderVM
+    public class PurchaseOrderVM : BaseVM
     {
         public int IdUserata { get; set; }
         public decimal Discount { get; set; }

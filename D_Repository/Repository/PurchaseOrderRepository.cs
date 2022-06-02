@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using crudApi.C_Domain;
 using crudApi.D_Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace crudApi.D_Repository.Repository
 {
@@ -17,6 +18,7 @@ namespace crudApi.D_Repository.Repository
         {
             try
             {
+                this.dbContext.AttachRange(entity.Products);
                 this.dbContext.purchaseOrders.Add(entity);
             }
             catch (System.Exception ex)
@@ -43,7 +45,8 @@ namespace crudApi.D_Repository.Repository
         {
             try
             {
-                return this.dbContext.purchaseOrders.ToList();
+                
+                return this.dbContext.purchaseOrders.Include("Products").ToList();
 
             }
             catch (System.Exception ex)
@@ -69,6 +72,7 @@ namespace crudApi.D_Repository.Repository
         {
             try
             {
+                // this.dbContext.AttachRange(entity.Products);
                 this.dbContext.purchaseOrders.Update(entity);
 
             }
