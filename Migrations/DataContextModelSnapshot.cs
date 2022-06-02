@@ -113,9 +113,6 @@ namespace crudApi.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdUserata")
                         .HasColumnType("int");
 

@@ -10,7 +10,8 @@ namespace crudApi.A_Application.Configuration
         {
             CreateMap<ProductVM,Product>().ReverseMap();
             CreateMap<UserDataVM,UserData>().ReverseMap();
-
+            CreateMap<PurchaseOrderVM,PurchaseOrder>().ReverseMap();
+        
         }
 
         

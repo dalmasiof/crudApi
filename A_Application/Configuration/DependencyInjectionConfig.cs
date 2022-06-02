@@ -10,21 +10,25 @@ namespace crudApi.A_Application.Configuration
 {
     public static class DependencyInjectionConfig
     {
-         public static void DependencyInjection(IServiceCollection services)
-         {
-             //Services
-             services.AddScoped<IProductService, ProductService>();
-             services.AddScoped<IUserService, UserDataService>();
-
-
-             //Repository
-             services.AddScoped<IProductRepository, ProductRepository>();
-             services.AddScoped<IUserRepository, UserRepository>();
+        public static void DependencyInjection(IServiceCollection services)
+        {
+            //Services
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserDataService>();
+            services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
 
 
 
-         }   
+            //Repository
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 
-         
+
+
+
+        }
+
+
     }
 }

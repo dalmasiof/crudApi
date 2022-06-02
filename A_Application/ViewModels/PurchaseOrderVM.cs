@@ -6,7 +6,6 @@ namespace crudApi.A_Application.ViewModels
     public class PurchaseOrderVM
     {
         public int IdUserata { get; set; }
-        public int IdProduct { get; set; }
         public decimal Discount { get; set; }
         public decimal Total { get; set; }
         public decimal TotalToPay { get; set; }

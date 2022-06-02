@@ -8,7 +8,7 @@ using crudApi.D_Repository;
 namespace crudApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220601002223_InitialCreate")]
+    [Migration("20220602014159_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,9 +114,6 @@ namespace crudApi.Migrations
                     b.Property<decimal>("Discount")
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
-
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
 
                     b.Property<int>("IdUserata")
                         .HasColumnType("int");
