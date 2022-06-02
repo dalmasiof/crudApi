@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace crudApi.A_Application.Controllers
 {
+    [Route("PurchaseOrder")]
+    [ApiController]
     public class PurchaseOrderController : ControllerBase
     {
 
@@ -23,21 +25,7 @@ namespace crudApi.A_Application.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost]
-        public ActionResult Post(PurchaseOrderVM model)
-        {
-            var prodTOCreate = mapper.Map<PurchaseOrderVM, PurchaseOrder>(model);
 
-            this.purchaseOrderService.Add(prodTOCreate);
-            if (this.purchaseOrderService.SaveChanges())
-            {
-                return Ok(prodTOCreate);
-            }
-            else
-            {
-                return BadRequest("PO creating Error");
-            }
-        }
 
         [HttpGet]
         public ActionResult Get()
@@ -54,6 +42,17 @@ namespace crudApi.A_Application.Controllers
             {
                 return NotFound("PO`s empty list");
             }
+        }
+
+        [HttpPost]
+        public ActionResult Post(PurchaseOrderVM model)
+        {
+            var PObd = this.mapper.Map<PurchaseOrderVM, PurchaseOrder>(model);
+            this.purchaseOrderService.Add(PObd);
+            if (this.purchaseOrderService.SaveChanges())
+                return Ok(model);
+
+            return BadRequest();
         }
 
         [HttpDelete("{Id}")]
@@ -76,8 +75,8 @@ namespace crudApi.A_Application.Controllers
         public ActionResult Get(int Id)
         {
 
-            var poGetbyId = this.mapper.Map<PurchaseOrder,PurchaseOrderVM>(this.purchaseOrderService.GetList().Where(x=>x.Id == Id).FirstOrDefault()); 
-            
+            var poGetbyId = this.mapper.Map<PurchaseOrder, PurchaseOrderVM>(this.purchaseOrderService.GetList().Where(x => x.Id == Id).FirstOrDefault());
+
 
             if (poGetbyId != null)
             {
