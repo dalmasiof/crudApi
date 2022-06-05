@@ -71,7 +71,8 @@ namespace crudApi.A_Application.Controllers
             }
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet]
+        [Route("GetById/{Id}")]
         public ActionResult Get(int Id)
         {
 
