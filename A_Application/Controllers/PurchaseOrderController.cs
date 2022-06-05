@@ -88,6 +88,24 @@ namespace crudApi.A_Application.Controllers
             }
         }
 
+        [HttpGet("{Id}")]
+        [Route("GetPosCli/{Id}")]
+        public ActionResult GetByUserId(int Id)
+        {
+
+            var poGetbyUserId = this.mapper.Map<IEnumerable<PurchaseOrder>, IEnumerable<PurchaseOrderVM>>(this.purchaseOrderService.GetList().Where(x => x.IdUserata == Id).OrderByDescending(x => x.Id));
+
+
+            if (poGetbyUserId.Any())
+            {
+                return Ok(poGetbyUserId);
+            }
+            else
+            {
+                return BadRequest("POs not found");
+            }
+        }
+
         [HttpPut]
         public ActionResult Put(PurchaseOrderVM poVM)
         {
