@@ -103,7 +103,7 @@ namespace crudApi.A_Application.Controllers
             }
             else
             {
-                return BadRequest("POs not found");
+                return Ok();
             }
         }
 
